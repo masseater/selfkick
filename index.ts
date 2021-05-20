@@ -28,7 +28,7 @@ const main = async () => {
 			const { numbers, sum } = roll.eval();
 			await msg.channel.send(`sum => ${sum}\nvalues => ${numbers}`);
 		} catch (error) {
-			await msg.channel.send("アホ");
+			msg.react("🤔");
 		}
 	});
 };

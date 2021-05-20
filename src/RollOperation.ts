@@ -3,6 +3,9 @@ export class RollOperation {
 	private count: number;
 	constructor(context: string) {
 		const [count, number] = context.split("d").map((s) => parseInt(s));
+		if (count === undefined || number === undefined) {
+			throw new Error("undefined");
+		}
 		if (count > 100 || number > 1000) {
 			throw new Error("too large");
 		}
