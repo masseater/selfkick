@@ -1,6 +1,7 @@
 import { Client } from "discord.js";
 import { setting } from "./src/Setting";
-import { RollOperation } from "./src/RollOperation";
+import { RollOperation } from "./src/Operations";
+import { ContextParser } from "./src/ContextParser";
 
 const main = async () => {
 	const client = new Client();
@@ -18,16 +19,19 @@ const main = async () => {
 	});
 	client.on("message", async (msg) => {
 		const { content } = msg;
-		const [prefix, context] = content.split(" ");
+		const [prefix, ...context] = content.split(" ");
 		if (prefix !== "/r") {
 			return;
 		}
 
 		try {
-			const roll = new RollOperation(context);
-			const { numbers, sum } = roll.eval();
-			await msg.channel.send(`sum => ${sum}\nvalues => ${numbers}`);
+			const operation = ContextParser.parse(context);
+			const { numbers, label, result } = operation.eval();
+			await msg.channel.send(
+				`${label} => ${result}\nvalues => ${numbers}`,
+			);
 		} catch (error) {
+			console.log(error);
 			msg.react("🤔");
 		}
 	});
